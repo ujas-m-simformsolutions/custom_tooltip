@@ -4,14 +4,11 @@ class OverlayPainter extends CustomPainter {
   OverlayPainter({
     required this.rect,
     required this.shadow,
-    // required this.gradient,
     required this.radius,
   });
 
   final Rect rect;
   final BoxShadow shadow;
-
-  // final Gradient gradient;
   final double radius;
 
   @override
@@ -19,20 +16,14 @@ class OverlayPainter extends CustomPainter {
     canvas.saveLayer(Offset.zero & size, Paint());
     // Draws shadow
     canvas.drawColor(shadow.color, BlendMode.dstATop);
-
-    // A try to draw gradient
-    // canvas.drawRect(
-    //   Rect.fromPoints(Offset.zero, Offset(size.width, size.height)),
-    //   Paint()
-    //     ..shader = gradient.createShader(
-    //         Rect.fromPoints(Offset.zero, Offset(size.width, size.height)))
-    //     ..blendMode = BlendMode.dstATop,
-    // );
-    canvas.drawRRect(RRect.fromRectAndRadius(rect, Radius.circular(radius)),
-        shadow.toPaint()..blendMode = BlendMode.clear);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(rect, Radius.circular(radius)),
+      shadow.toPaint()..blendMode = BlendMode.clear,
+    );
     canvas.restore();
   }
 
+  /// Here old != new can be done.
   @override
   bool shouldRepaint(OverlayPainter oldDelegate) => true;
 }
