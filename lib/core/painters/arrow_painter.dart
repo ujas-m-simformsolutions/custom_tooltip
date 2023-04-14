@@ -101,6 +101,7 @@ class ArrowPainter extends CustomPainter {
     final endPosition = targetAnchor.resolve(TextDirection.ltr).withinRect(
         Rect.fromLTWH(endGlobalOffset.dx, endGlobalOffset.dy,
             targetRenderBox.size.width, targetRenderBox.size.height));
+
     final arrow = getArrow(
       startPosition.dx,
       startPosition.dy,
@@ -145,6 +146,7 @@ class ArrowPainter extends CustomPainter {
     return true;
   }
 
+  /// Provides part of the path so that we can animate it.
   Path createAnimatedPath(
     Path originalPath,
     double animationPercent,

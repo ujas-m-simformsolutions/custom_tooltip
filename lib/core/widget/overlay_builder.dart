@@ -45,7 +45,6 @@ class _OverlayBuilderState extends State<OverlayBuilder>
       duration: const Duration(seconds: 3),
     );
     findTargetAndAddEntry();
-    //remove();
   }
 
   @override
@@ -61,7 +60,8 @@ class _OverlayBuilderState extends State<OverlayBuilder>
       if (box != null) {
         target = box;
         widgetPosition = box.localToGlobal(Offset.zero);
-        // This `&` operation between offset and size gives rect object so no need to do operations similar to showcase view.
+        // This `&` operation between offset and size gives rect object so no
+        // need to do operations similar to showcase view.
         final bound = widgetPosition! & box.size;
         rect = bound;
         setState(() {});
@@ -100,15 +100,14 @@ class _OverlayBuilderState extends State<OverlayBuilder>
             source = tooltipBox;
           });
           controller.forward();
+          // We have to call setState like this because tooltip is laid out after
+          // overlay is created so we will get it's render object some time
+          // later and as overlay isn't in same context we have to call
+          // setState from here.
           Overlay.of(context).setState(() {});
         }
       }
     });
-  }
-
-  void remove() async {
-    await Future.delayed(const Duration(seconds: 5));
-    overlayEntry?.remove();
   }
 
   @override
