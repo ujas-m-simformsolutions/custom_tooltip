@@ -118,7 +118,7 @@ class ArrowPainter extends CustomPainter {
       arcDirection: arcDirection,
     );
 
-    final path = _createPath(arrow);
+    final path = _createLinePath(arrow);
 
     final paint = Paint()
       ..color = color
@@ -134,15 +134,17 @@ class ArrowPainter extends CustomPainter {
         <double>[5, 10],
       ),
     );
+
+    // This will add arrow tip to line after creating dashed line other wise
+    // arrow tip also will be dashed.
+    dashedPath.addPath(_createArrowTipPath(path), Offset.zero);
     final animatedPath = createAnimatedPath(dashedPath, animation.value);
     canvas.drawPath(animatedPath, paint);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    // Flutter's repaint system is smart enough to know when to repaint but we can
-    // be double sure by checking old != new but here I haven't done it because
-    // i'm lazy.
+    // TODO: update with  old != new.
     return true;
   }
 
@@ -194,12 +196,17 @@ class ArrowPainter extends CustomPainter {
     return path;
   }
 
-  Path _createPath(Arrow arrow) {
+  Path _createLinePath(Arrow arrow) {
     final path = Path()
       ..moveTo(arrow.sx, arrow.sy)
       ..quadraticBezierTo(arrow.cx, arrow.cy, arrow.ex, arrow.ey);
+    return path;
+  }
 
+  Path _createArrowTipPath(Path path) {
     final metrics = path.computeMetrics().toList();
+
+    final arrowTipPath = Path();
 
     final lastPathMetric = metrics.last;
     final firstPathMetric = metrics.first;
@@ -222,13 +229,13 @@ class ArrowPainter extends CustomPainter {
 
     tipVector =
         _rotateVector(tan.vector, angleStart - adjustmentAngle) * tipLength;
-    path.moveTo(tan.position.dx, tan.position.dy);
-    path.relativeLineTo(tipVector.dx, tipVector.dy);
+    arrowTipPath.moveTo(tan.position.dx, tan.position.dy);
+    arrowTipPath.relativeLineTo(tipVector.dx, tipVector.dy);
 
     tipVector =
         _rotateVector(tan.vector, -angleStart - adjustmentAngle) * tipLength;
-    path.moveTo(tan.position.dx, tan.position.dy);
-    path.relativeLineTo(tipVector.dx, tipVector.dy);
+    arrowTipPath.moveTo(tan.position.dx, tan.position.dy);
+    arrowTipPath.relativeLineTo(tipVector.dx, tipVector.dy);
 
     if (doubleSided) {
       tan = firstPathMetric.getTangentForOffset(0)!;
@@ -239,17 +246,17 @@ class ArrowPainter extends CustomPainter {
 
       tipVector =
           _rotateVector(-tan.vector, angleStart - adjustmentAngle) * tipLength;
-      path.moveTo(tan.position.dx, tan.position.dy);
-      path.relativeLineTo(tipVector.dx, tipVector.dy);
+      arrowTipPath.moveTo(tan.position.dx, tan.position.dy);
+      arrowTipPath.relativeLineTo(tipVector.dx, tipVector.dy);
 
       tipVector =
           _rotateVector(-tan.vector, -angleStart - adjustmentAngle) * tipLength;
-      path.moveTo(tan.position.dx, tan.position.dy);
-      path.relativeLineTo(tipVector.dx, tipVector.dy);
+      arrowTipPath.moveTo(tan.position.dx, tan.position.dy);
+      arrowTipPath.relativeLineTo(tipVector.dx, tipVector.dy);
     }
 
-    path.moveTo(originalPosition.dx, originalPosition.dy);
-    return path;
+    arrowTipPath.moveTo(originalPosition.dx, originalPosition.dy);
+    return arrowTipPath;
   }
 
   static Offset _rotateVector(Offset vector, double angle) => Offset(

@@ -23,7 +23,7 @@ class OverlayPainter extends CustomPainter {
     canvas.restore();
   }
 
-  /// Here old != new can be done.
+  // TODO: update with  old != new.
   @override
   bool shouldRepaint(OverlayPainter oldDelegate) => true;
 }
