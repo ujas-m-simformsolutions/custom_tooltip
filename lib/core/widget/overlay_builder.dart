@@ -44,7 +44,7 @@ class _OverlayBuilderState extends State<OverlayBuilder>
       vsync: this,
       duration: const Duration(seconds: 3),
     );
-    findTargetAndAddEntry();
+    _findTargetAndAddEntry();
   }
 
   @override
@@ -54,7 +54,12 @@ class _OverlayBuilderState extends State<OverlayBuilder>
     super.dispose();
   }
 
-  void findTargetAndAddEntry() {
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
+
+  void _findTargetAndAddEntry() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final box = widget.key.currentContext?.findRenderObject() as RenderBox?;
       if (box != null) {
@@ -66,11 +71,11 @@ class _OverlayBuilderState extends State<OverlayBuilder>
         rect = bound;
         setState(() {});
       }
-      addEntry();
+      _addEntry();
     });
   }
 
-  void calculateTooltipPosition() {
+  void _calculateTooltipPosition() {
     if (widgetPosition != null) {
       if (MediaQuery.of(context).size.height / 2 > widgetPosition!.dy) {
         verticalPosition = VerticalPosition.top;
@@ -85,10 +90,10 @@ class _OverlayBuilderState extends State<OverlayBuilder>
     }
   }
 
-  void addEntry() {
-    calculateTooltipPosition();
+  void _addEntry() {
+    _calculateTooltipPosition();
     overlayEntry = OverlayEntry(
-      builder: (_) => buildOverlay(),
+      builder: (_) => _buildOverlay(),
     );
     Overlay.of(context).insert(overlayEntry!);
     WidgetsBinding.instance.endOfFrame.then((_) {
@@ -110,12 +115,7 @@ class _OverlayBuilderState extends State<OverlayBuilder>
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return widget.child;
-  }
-
-  Widget buildOverlay() {
+  Widget _buildOverlay() {
     return Stack(
       children: [
         IgnorePointer(
