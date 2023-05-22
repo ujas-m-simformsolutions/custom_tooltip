@@ -68,9 +68,13 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            applicationVariants.all { variant ->
+                variant.outputs.all {
+                    def currentFile = new File(outputFileName)
+                    def filename = currentFile.getName()
+                    outputFileName = "../../../../../app/build/outputs/apk/${filename}"
+                }
+            }
         }
     }
 }
