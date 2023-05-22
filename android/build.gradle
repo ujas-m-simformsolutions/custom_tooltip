@@ -29,3 +29,12 @@ subprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+release {
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def currentFile = new File(outputFileName)
+            def filename = currentFile.getName()
+            outputFileName = "../../../../../app/build/outputs/apk/${filename}"
+        }
+    }
+}
