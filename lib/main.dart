@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'core/widget/overlay_builder.dart';
+// import 'package:flutter_appcenter_bundle/flutter_appcenter_bundle.dart';
 
-void main() {
+void main() async {
+  // await AppCenter.startAsync(
+  //   appSecretAndroid: 'f06360f2-5c8c-4f82-8308-5d309879aa9c',
+  //   enableAnalytics: false,
+  //   enableCrashes: false,
+  //   appSecretIOS: '',
+  // );
+
   runApp(const MyApp());
 }
 
