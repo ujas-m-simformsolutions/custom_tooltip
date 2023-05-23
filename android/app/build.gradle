@@ -57,14 +57,6 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
-    signingConfigs {
-        release {
-            storeFile rootProject.file("app/android.keystore")
-            storePassword System.getenv("APPCENTER_KEYSTORE_PASSWORD")
-            keyAlias System.getenv("APPCENTER_KEY_ALIAS")
-            keyPassword System.getenv("APPCENTER_KEY_PASSWORD")
-        }
-    }
 
     buildTypes {
         release {
@@ -90,7 +82,4 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    def appCenterSdkVersion = '4.4.5'
-    implementation "com.microsoft.appcenter:appcenter-analytics:${appCenterSdkVersion}"
-    implementation "com.microsoft.appcenter:appcenter-crashes:${appCenterSdkVersion}"
 }
